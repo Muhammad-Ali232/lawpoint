@@ -1,40 +1,11 @@
 <?php 
 session_start();
-include 'Admin/connection.php';
+include ("Admin/connection.php");
 
-if(isset($_SESSION['username'])){
-    header("location: User/index.php");
-}
-
-if(isset($_POST['loginBtn'])){
-    $uname = $_POST['uname'];
-    $pass = $_POST['pass'];
-
-   $check =  "SELECT * FROM users WHERE username = '$uname' AND password = '$pass'";
-   $q = mysqli_query($connect, $check);
-   $row_count = mysqli_num_rows($q);
-   $fetch = mysqli_fetch_assoc($q);
-//    echo $row_count;
-
-if($row_count == 1){
-   $_SESSION['username'] =  $fetch['username'];
-   $_SESSION['userrole'] =  $fetch['role_id'];
-
-   if($fetch['role_id'] == 1){
-    header("location: Admin/index.php");
-   }
-   else if($fetch['role_id'] == 2){
-    header("location: User/index.php");
-   }
-}
-else{ ?>
-    <div class="alert alert-danger" role="alert">
-   Username OR password is Incorrect.
-</div>
-
-<?php
-}
-}
+// if(isset($_SESSION['username'])){
+//     header("location: concept-master/index.html");
+//     exit();
+// }
 ?>
 
 <!doctype html>
@@ -81,7 +52,7 @@ else{ ?>
                                         </div>
                                         <div class="form-group">
                                             <label for="inputPassword" >Password</label>
-                                            <input id="inputPassword" type="password" placeholder="Password"  class="form-control">
+                                            <input id="inputPassword" type="password" name="password" placeholder="Password"  class="form-control">
                                          </div>
                                          <div class="d-flex align-items-center justify-content-between mb-4">
                                             <div class="form-check">
@@ -90,7 +61,7 @@ else{ ?>
                                             </div>
                                         </div>
                                          <div class="d-flex flex-column align-items-center">
-                                          <button type="submit" class="btn btn-dark w-50 mb-3">Login</button>
+                                          <button type="submit" name="login_btn" class="btn btn-dark w-50 mb-3">Login</button>
                                            <p class="text-center mb-0">Don't have an Account? <a href="signup.php">Sign Up</a></p>
                                         </div>   
                                     </form>
@@ -98,25 +69,59 @@ else{ ?>
                             </div>
                         </div>
 
-<script src="../assets/vendor/jquery/jquery-3.3.1.min.js"></script>
+<script src="..s/vendor/jquery/jquery-3.3.1.min.js"></script>
     <script src="Admin/assets/vendor/bootstrap/js/bootstrap.bundle.js"></script>
     <script src="Admin/assets/vendor/slimscroll/jquery.slimscroll.js"></script>
     <script src="Admin/assets/vendor/parsley/parsley.js"></script>
     <script src="Admin/assets/libs/js/main-js.js"></script>
-</body>
-</body>
- 
-</html>
-
-
-<script>
+    <script>
     function showPass(){
         var inputPassword = document.getElementById('inputPassword');
         if(inputPassword.type === "password"){
             inputPassword.type = "text";
         }
-        else{
+    else{
             inputPassword.type = "password";
         }
     }
 </script>
+</body>
+
+ 
+</html>
+
+
+
+<?php
+if(isset($_POST['login_btn'])){
+    // $name = $_POST['name'];
+    // $email = $_POST['email'];
+    // $pass = $_POST['password'];
+    $name =  $_POST['name'];
+    $email = $_POST['email'];
+    $pass =  $_POST['password'];
+
+   $check =  "SELECT * FROM `customers` WHERE `customer_name` = '$name' AND `email` = '$email' AND `password` = '$pass'";
+   $q = mysqli_query($connect, $check);
+   $row_count = mysqli_num_rows($q);
+   
+//    echo $row_count;
+
+if($row_count === 1){
+    $fetch = mysqli_fetch_assoc($q);
+   $_SESSION['username'] =  $fetch['customer_name'];
+   $_SESSION['userrole'] =  $fetch['role_id'];
+
+   if($fetch['role_id'] == 2){
+    header("location: Admin/index.php");
+   }
+   else if($fetch['role_id'] == 1){
+    header("location: concept-master/index.html");
+   }
+   else {
+    // Invalid credentials handling
+    echo "<script>alert('Invalid username, email, or password. Please try again.');</script>";
+}
+}; 
+};
+?>

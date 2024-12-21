@@ -1,3 +1,11 @@
+<?php
+include("Admin/connection.php");
+
+$c_sel = "SELECT * FROM `categories`";
+$c_row = mysqli_query($connect, $c_sel);
+?>
+
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -20,9 +28,9 @@
 <body>
   <div class="container form-container">
     <h2 class="text-center mb-4" style="color: lightblue; font-size: 50px; font-family: cooper;">Signup to LawPoint</h2>
-    <div class="mb-3">
+    <div class="mb-3 d-flex flex-column justify-content-center align-items-center">
       <label for="userType" class="form-label" style="color: lightblue; font-size: 20px;">Select User Type:</label>
-      <select class="form-select" id="userType">
+      <select class="form-select"  style="width: 50%; "  id="userType">
         <option value="" selected disabled>Select</option>
         <option value="customer">Customer</option>
         <option value="lawyer">Lawyer</option>
@@ -30,82 +38,177 @@
     </div>
 
     <!-- Customer Form -->
-    <form id="customerForm" class="hidden">
-      <h3 style="color: lightblue;">Customer Signup</h3>
-      <div class="mb-3">
+    <form id="customerForm" class="hidden" method="POST">
+      <h3 style="color: lightblue; text-align: center;">Customer Signup</h3>
+      <div class="mb-3 d-flex flex-column justify-content-center align-items-center">
         <label for="customerName" class="form-label" style="color: lightblue; font-size: 20px;">Full Name</label>
-        <input type="text" class="form-control" id="customerName" placeholder="Enter your name">
+        <input style="width: 50%; " type="text" class="form-control" id="customerName" name="customerName" placeholder="Enter your name">
       </div>
-      <div class="mb-3">
+      <div class="mb-3 d-flex flex-column justify-content-center align-items-center">
+      <label class="mb-2"  style="color: lightblue; font-size: 20px;">Gender</label>
+      <select style="width: 50%; " name="gender" id="" class="form-select">
+            <option disabled selected>Select</option>
+            <option value="M">Male</option>
+            <option value="F">Female</option>
+        </select>
+      </div>
+      <div class="mb-3 d-flex flex-column justify-content-center align-items-center">>
+        <label for="dob" class="form-label" style="color: lightblue; font-size: 20px;">Date Of Birth</label>
+        <input style="width: 50%; " type="date" class="form-control" id="dob" name="dob" placeholder="Enter your email">
+      </div>
+      <div class="mb-3 d-flex flex-column justify-content-center align-items-center">>
         <label for="customerEmail" class="form-label" style="color: lightblue; font-size: 20px;">Email</label>
-        <input type="email" class="form-control" id="customerEmail" placeholder="Enter your email">
+        <input style="width: 50%; " type="email" class="form-control" id="customerEmail" name="customerEmail" placeholder="Enter your email">
       </div>
-      <div class="mb-3">
+      <div class="mb-3 d-flex flex-column justify-content-center align-items-center">>
         <label for="customerPassword" class="form-label" style="color: lightblue; font-size: 20px;">Password</label>
-        <input type="password" class="form-control" id="customerPassword" placeholder="Enter your password">
+        <input style="width: 50%; " type="password" class="form-control" id="customerPassword" name="customerPassword" placeholder="Enter your password">
       </div>
-       <div class="d-flex align-items-center justify-content-between mb-4">
+       <div class="d-flex flex-column align-items-center justify-content-center mb-3">
           <div class="form-check">
              <input type="checkbox" class="form-check-input" id="exampleCheck1" onclick="toggleCustomerPassword()">
-             <label class="form-check-label" for="exampleCheck1">Show Password</label>
+             <label class="form-check-label" for="exampleCheck1"  style="color: lightblue; font-size: 15px;">Show Password</label>
          </div>
       </div>
-      <button type="submit" class="btn btn-dark">Sign Up</button>
+      <div  class="d-flex justify-content-center">
+      <button type="submit" class="btn btn-dark" name="signup_btn1">Sign Up</button>
+      </div>
     </form>
+
 
   
 
     <!-- Lawyer Form -->
-    <form id="lawyerForm" class="hidden">
-      <h3 style="color: lightblue;">Lawyer Signup</h3>
-      <div class="mb-3">
+    <form id="lawyerForm" class="hidden" method="POST" enctype="multipart/form-data">
+      <h3 style="color: lightblue; text-align: center;">Lawyer Signup</h3>
+      <div class="mb-3 d-flex flex-column justify-content-center align-items-center">
         <label for="lawyerName" class="form-label" style="color: lightblue; font-size: 20px;">Full Name</label>
-        <input type="text" class="form-control" id="lawyerName" placeholder="Enter your name">
+        <input style="width: 50%; " type="text" class="form-control" name="lawyerName" id="lawyerName" placeholder="Enter your name">
       </div>
 
-      <div class="mb-3">
-      <label class="mb-4"  style="color: lightblue; font-size: 20px;">Select Service Category</label>
+      <div class="mb-3 d-flex flex-column justify-content-center align-items-center">
+      <label class="mb-2"  style="color: lightblue; font-size: 20px;">Select Service Category</label>
         <!-- col-sm-12 col-xl-6 -->
-      <div class="bg-light rounded">
-      <select name="b_id" class="form-select mb-3" aria-label="Default select example">
-          <option selected>Select Brand</option>
+      
+      <select name="cat_name" class="form-select" style="width: 50%; " aria-label="Default select example">
+          <option selected disabled >Select Service Category</option>
+          <?php
+           while($option = mysqli_fetch_assoc($c_row)){ ?>
+          <option value=" <?php echo $option['category_id']?> "> <?php echo $option['category_name']?> </option>
+            <?php   }
+            ?>
  
                     
 
       </select></div>
-      <div class="mb-3">
-        <label for="lawyer_name" class="form-label" style="color: lightblue; font-size: 20px;">Experience Years</label>
-        <input type="text" class="form-control" id="lawyer_name" placeholder="Enter your name">
+      <div class="mb-3 d-flex flex-column justify-content-center align-items-center">
+        <label for="lawyer_experience" class="form-label" style="color: lightblue; font-size: 20px;">Experience Years</label>
+        <input style="width: 50%; " type="text" class="form-control" name="lawyer_experience" id="lawyer_experience" placeholder="Enter your years of experience">
       </div>
-      <div class="mb-3">
+      <div class="mb-3 d-flex flex-column justify-content-center align-items-center">
         <label for="lawyer_img" class="form-label" style="color: lightblue; font-size: 20px;">Profile Image</label>
-        <input type="file" class="form-control" id="lawyer_img" placeholder="Enter your name">
+        <input style="width: 50%; " type="file" class="form-control" name="lawyer_img" id="lawyer_img">
       </div>
-      <div class="mb-3">
+      <div class="mb-3 d-flex flex-column justify-content-center align-items-center">
         <label for="lawyer_desc" class="form-label" style="color: lightblue; font-size: 20px;">Description</label>
-        <input type="text" class="form-control" id="lawyer_desc" placeholder="Enter your name">
+        <input style="width: 50%; " type="text" class="form-control" name="lawyer_desc" id="lawyer_desc" placeholder="Enter your description">
       </div>
-      <div class="mb-3">
+      <div class="mb-3 d-flex flex-column justify-content-center align-items-center">
         <label for="lawyer_contact" class="form-label" style="color: lightblue; font-size: 20px;">Contact Number</label>
-        <input type="text" class="form-control" id="lawyer_contact" placeholder="Enter your name">
+        <input style="width: 50%; " type="text" class="form-control" name="lawyer_contact" id="lawyer_contact" placeholder="Enter your contact number">
       </div>
-      <div class="mb-3">
+      <div class="mb-3 d-flex flex-column justify-content-center align-items-center">
         <label for="lawyer_email" class="form-label" style="color: lightblue; font-size: 20px;">Email</label>
-        <input type="email" class="form-control" id="lawyer_email" placeholder="Enter your email">
+        <input style="width: 50%; " type="email" class="form-control" name="lawyer_email" id="lawyer_email" placeholder="Enter your email">
       </div>
-      <div class="mb-3">
+      <div class="mb-3 d-flex flex-column justify-content-center align-items-center">
         <label for="lawyerPassword" class="form-label" style="color: lightblue; font-size: 20px;">Password</label>
-        <input type="password" class="form-control" id="lawyerPassword" placeholder="Enter your password">
+        <input style="width: 50%; " type="password" class="form-control" name="lawyerPassword" id="lawyerPassword" placeholder="Enter your password">
       </div>
-      <div class="d-flex align-items-center justify-content-between mb-4">
+      <div class="d-flex flex-column align-items-center justify-content-center mb-3">
              <div class="form-check">
                 <input type="checkbox" class="form-check-input" id="exampleCheck1" onclick="toggleLawyerPassword()">
-                <label class="form-check-label" for="exampleCheck1">Show Password</label>
+                <label class="form-check-label" for="exampleCheck1"  style="color: lightblue; font-size: 15px;">Show Password</label>
             </div>
        </div>
-      <button type="submit" class="btn btn-dark">Sign Up</button>
+       <div  class="d-flex justify-content-center">
+      <button type="submit" class="btn btn-dark" name="signup_btn2">Sign Up</button>
+      </div>
     </form>
   </div>
+
+  
+  <?php 
+if(isset($_POST['signup_btn1'])){
+    $customerName = $_POST['customerName'];
+    $gender = $_POST['gender'];
+    $dob = $_POST['dob'];
+    $customerEmail = $_POST['customerEmail'];
+    $customerPassword = $_POST['customerPassword'];
+    $role_id = 2;
+
+
+    
+    $insert = "INSERT INTO `customers`(`customer_name`, `gender`, `date_of_birth`, `email`, `password`, `role_id`) 
+    VALUES ('$customerName','$gender','$dob','$customerEmail','$customerPassword','$role_id1')";
+    $done = mysqli_query($connect, $insert);
+
+
+    if($done){
+      echo "<script>
+        alert('Account Created.');
+        window.location.href = 'login.php';
+        </script>";
+    }
+};
+
+if(isset($_POST['signup_btn2'])){
+
+  $lawyerName = $_POST['lawyerName'];
+  $cat_name = $_POST['cat_name'];
+  $lawyer_experience = $_POST['lawyer_experience'];
+  $lawyer_desc = $_POST['lawyer_desc'];
+  $lawyer_contact = $_POST['lawyer_contact'];
+  $lawyer_email = $_POST['lawyer_email'];
+  $lawyerPassword = $_POST['lawyerPassword'];
+  $roleid = 3;
+
+
+  $lawyer_img = $_FILES['lawyer_img'];
+  // $img_name = $lawyer_img['name'];
+  // $img_tmpname = $lawyer_img['tmp_name'];
+  // $img_size = $lawyer_img['size'];
+  // $img_type = $lawyer_img['type'];
+
+  // $path = 'Admin/lawyer_pics/' . $img_name;
+
+  // move_uploaded_file($img_tmpname, $path);
+
+//  header("Location: Admin/pendingRequests.php?lawyername=$lawyerName & catname=$cat_name & lawyerexperience=
+//  $lawyer_experience & lawyerdesc=$lawyer_desc & lawyercontact=$lawyer_contact & lawyeremail=$lawyer_email &
+//  lawyerpassword=$lawyerPassword & roleid=$roleid & lawyerimg=$lawyer_img");
+//  exit();
+
+  $status = "Pending";
+
+  // $insert = "INSERT INTO `lawyers`(`lawyer_name`, `specialization`, `experience_years`, `profile_image`, `description`, `contact-number`, `email`, `password` , `role_id`)
+  //  VALUES ( $lawyerName , $cat_name , $lawyer_experience , $img_name , $lawyer_desc , $lawyer_contact , $lawyer_email , $lawyerPassword , $roleid )"
+  
+ $pend = "INSERT INTO pending_requests (name, email, specialization, experience_years, status)
+   VALUES ( '$lawyerName' , '$lawyer_email' , '$cat_name' , '$lawyer_experience' , '$status' )";
+
+   $a = mysqli_query($connect , $pend);
+
+   if($a){
+    echo "
+    <script>
+    alert('Your Request has been send to the Admin for approval.');
+    </script>";
+   }
+};
+
+?>
+
 
   <script>
     document.getElementById('userType').addEventListener('change', function () {

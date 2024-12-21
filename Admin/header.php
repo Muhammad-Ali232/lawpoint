@@ -153,7 +153,7 @@
                                 Menu
                             </li>
                             <li class="nav-item ">
-                                <a class="nav-link" href="index.php"><i class="fa fa-fw fa-user-circle"></i>Dashboard <span class="badge badge-success">6</span></a>
+                                <a class="nav-link" href="index.php"><i class="fa fa-fw fa-user-circle"></i>Dashboard</a>
                             </li>
 
                             <!-- ROLES -->
@@ -193,6 +193,13 @@
                                     </ul>
                                 </div>
                             </li>
+
+                            <!-- PENDING REQUESTS -->
+
+                            <li class="nav-item ">
+                                <a class="nav-link" href="pendingRequests.php"><i class="fa fa-fw fa-user-circle"></i>Pending Requests</a>
+                            </li>
+
                            
                         </ul>
                     </div>
