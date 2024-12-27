@@ -1,11 +1,42 @@
-<?php 
-session_start();
-include ("Admin/connection.php");
+<?php
+ob_start();
+include("Admin/connection.php");
 
-// if(isset($_SESSION['username'])){
-//     header("location: concept-master/index.html");
-//     exit();
-// }
+if(isset($_POST['login_btn'])){
+
+    $name =  $_POST['name'];
+    $email = $_POST['email'];
+    $pass =  $_POST['password'];
+
+   $check =  "SELECT * FROM `customers` WHERE `customer_name` = '$name' AND `email` = '$email' AND `password` = '$pass'";
+   $result_customer = mysqli_query($connect, $check);
+   if (!$result_customer) {
+    die("Customer Query Failed: " . mysqli_error($connect));
+}
+
+$check2 = "SELECT * FROM lawyers WHERE `lawyer_name` = '$name' AND `email` = '$email' AND `password` = '$pass'";
+$result_lawyer = mysqli_query($connect , $check2);
+
+if (mysqli_num_rows($result_customer) === 1) {
+    $fetch = mysqli_fetch_assoc($result_customer);
+
+    if ($fetch['role_id'] == 2) {
+        header("Location: concept-master/index.html");
+        exit();
+    }
+} elseif (mysqli_num_rows($result_lawyer) === 1) {
+    $fetch = mysqli_fetch_assoc($result_lawyer);
+
+    if ($fetch['role_id'] == 3) {
+        header("Location: Admin/index.php");
+        exit();
+    }
+} else {
+    echo "<script>alert('Invalid username, email, or password. Please try again.');</script>";
+}
+
+ob_end_flush();
+}; 
 ?>
 
 <!doctype html>
@@ -90,38 +121,3 @@ include ("Admin/connection.php");
  
 </html>
 
-
-
-<?php
-if(isset($_POST['login_btn'])){
-    // $name = $_POST['name'];
-    // $email = $_POST['email'];
-    // $pass = $_POST['password'];
-    $name =  $_POST['name'];
-    $email = $_POST['email'];
-    $pass =  $_POST['password'];
-
-   $check =  "SELECT * FROM `customers` WHERE `customer_name` = '$name' AND `email` = '$email' AND `password` = '$pass'";
-   $q = mysqli_query($connect, $check);
-   $row_count = mysqli_num_rows($q);
-   
-//    echo $row_count;
-
-if($row_count === 1){
-    $fetch = mysqli_fetch_assoc($q);
-   $_SESSION['username'] =  $fetch['customer_name'];
-   $_SESSION['userrole'] =  $fetch['role_id'];
-
-   if($fetch['role_id'] == 2){
-    header("location: Admin/index.php");
-   }
-   else if($fetch['role_id'] == 1){
-    header("location: concept-master/index.html");
-   }
-   else {
-    // Invalid credentials handling
-    echo "<script>alert('Invalid username, email, or password. Please try again.');</script>";
-}
-}; 
-};
-?>

@@ -97,8 +97,6 @@ $c_row = mysqli_query($connect, $c_sel);
           <option value=" <?php echo $option['category_id']?> "> <?php echo $option['category_name']?> </option>
             <?php   }
             ?>
- 
-                    
 
       </select></div>
       <div class="mb-3 d-flex flex-column justify-content-center align-items-center">
@@ -115,7 +113,7 @@ $c_row = mysqli_query($connect, $c_sel);
       </div>
       <div class="mb-3 d-flex flex-column justify-content-center align-items-center">
         <label for="lawyer_contact" class="form-label" style="color: lightblue; font-size: 20px;">Contact Number</label>
-        <input style="width: 50%; " type="text" class="form-control" name="lawyer_contact" id="lawyer_contact" placeholder="Enter your contact number">
+        <input style="width: 50%; " type="number" class="form-control" name="lawyer_contact" id="lawyer_contact" placeholder="Enter your contact number" required pattern="\d+" min="1000000000" max="9999999999">
       </div>
       <div class="mb-3 d-flex flex-column justify-content-center align-items-center">
         <label for="lawyer_email" class="form-label" style="color: lightblue; font-size: 20px;">Email</label>
@@ -137,6 +135,8 @@ $c_row = mysqli_query($connect, $c_sel);
     </form>
   </div>
 
+
+  <!-- PHP WORK -->
   
   <?php 
 if(isset($_POST['signup_btn1'])){
@@ -146,11 +146,22 @@ if(isset($_POST['signup_btn1'])){
     $customerEmail = $_POST['customerEmail'];
     $customerPassword = $_POST['customerPassword'];
     $role_id = 2;
+    $encPass = password_hash($customerPassword, PASSWORD_BCRYPT);
 
+    $sel = "SELECT * FROM customers WHERE customer_name = '$customerName'";
+    $q = mysqli_query($connect, $sel);
+    $row_count = mysqli_num_rows($q);
 
+    if($row_count > 0){
+       echo "<script>
+        alert('Username already Exist!');
+        </script>";
+    }
     
+    else{
+
     $insert = "INSERT INTO `customers`(`customer_name`, `gender`, `date_of_birth`, `email`, `password`, `role_id`) 
-    VALUES ('$customerName','$gender','$dob','$customerEmail','$customerPassword','$role_id1')";
+    VALUES ('$customerName','$gender','$dob','$customerEmail','$encPass','$role_id')";
     $done = mysqli_query($connect, $insert);
 
 
@@ -160,6 +171,7 @@ if(isset($_POST['signup_btn1'])){
         window.location.href = 'login.php';
         </script>";
     }
+  }
 };
 
 if(isset($_POST['signup_btn2'])){
@@ -171,31 +183,38 @@ if(isset($_POST['signup_btn2'])){
   $lawyer_contact = $_POST['lawyer_contact'];
   $lawyer_email = $_POST['lawyer_email'];
   $lawyerPassword = $_POST['lawyerPassword'];
-  $roleid = 3;
 
 
   $lawyer_img = $_FILES['lawyer_img'];
-  // $img_name = $lawyer_img['name'];
-  // $img_tmpname = $lawyer_img['tmp_name'];
-  // $img_size = $lawyer_img['size'];
-  // $img_type = $lawyer_img['type'];
+  $img_name = $lawyer_img['name'];
+  $img_tmpname = $lawyer_img['tmp_name'];
+  $img_size = $lawyer_img['size'];
+  $img_type = $lawyer_img['type'];
 
-  // $path = 'Admin/lawyer_pics/' . $img_name;
+  $path = 'Admin/lawyer_pics/' . $img_name;
 
-  // move_uploaded_file($img_tmpname, $path);
+  move_uploaded_file($img_tmpname, $path);
 
-//  header("Location: Admin/pendingRequests.php?lawyername=$lawyerName & catname=$cat_name & lawyerexperience=
-//  $lawyer_experience & lawyerdesc=$lawyer_desc & lawyercontact=$lawyer_contact & lawyeremail=$lawyer_email &
-//  lawyerpassword=$lawyerPassword & roleid=$roleid & lawyerimg=$lawyer_img");
-//  exit();
 
   $status = "Pending";
 
-  // $insert = "INSERT INTO `lawyers`(`lawyer_name`, `specialization`, `experience_years`, `profile_image`, `description`, `contact-number`, `email`, `password` , `role_id`)
-  //  VALUES ( $lawyerName , $cat_name , $lawyer_experience , $img_name , $lawyer_desc , $lawyer_contact , $lawyer_email , $lawyerPassword , $roleid )"
+
+  $encPass = password_hash($lawyerPassword, PASSWORD_BCRYPT);
+
+    $sel = "SELECT * FROM lawyers WHERE lawyer_name = '$lawyerName'";
+    $q = mysqli_query($connect, $sel);
+    $row_count = mysqli_num_rows($q);
+
+    if($row_count > 0){
+       echo "<script>
+        alert('Username already Exist!');
+        </script>";
+    }
+
+    else{
   
- $pend = "INSERT INTO pending_requests (name, email, specialization, experience_years, status)
-   VALUES ( '$lawyerName' , '$lawyer_email' , '$cat_name' , '$lawyer_experience' , '$status' )";
+ $pend = "INSERT INTO pending_requests (name, email, specialization, experience_years, profile_image, contact_number, `description`, `password`, `status`)
+   VALUES ( '$lawyerName' , '$lawyer_email' , '$cat_name' , '$lawyer_experience' , '$img_name', '$lawyer_contact', '$lawyer_desc', '$encPass', '$status')";
 
    $a = mysqli_query($connect , $pend);
 
@@ -205,6 +224,7 @@ if(isset($_POST['signup_btn2'])){
     alert('Your Request has been send to the Admin for approval.');
     </script>";
    }
+  }
 };
 
 ?>

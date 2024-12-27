@@ -2,7 +2,7 @@
 include("connection.php");
 include("header.php");
 
-$select = "SELECT p.id, p.name, p.email, p.specialization, p.experience_years, p.status, c.category_id , c.category_name
+$select = "SELECT p. *, c.category_id , c.category_name
 FROM `pending_requests` p
 INNER JOIN `categories` c
 ON p.specialization = c.category_id";
@@ -23,7 +23,8 @@ $row = mysqli_query($connect, $select);
     <th>Specialization</th>
     <th>Experience Years</th>
     <th>Status</th>
-    <th>Action</th>
+    <th>Approve Requests</th>
+    <th>Reject Requests</th>
   </tr>
   <?php while ($fetch = mysqli_fetch_assoc($row)) { ?>
     <tr>
@@ -33,22 +34,83 @@ $row = mysqli_query($connect, $select);
       <td><?php echo $fetch['category_name']; ?></td>
       <td><?php echo $fetch['experience_years']; ?></td>
       <td><?php echo $fetch['status']; ?></td>
-      <td>
-        <form method="POST" action="approve_request.php">
-          <input type="hidden" name="id" value="<?php echo $fetch['id']; ?>">
-          <input type="hidden" name="name" value="<?php echo  $fetch['name']; ?>">
-          <input type="hidden" name="email" value="<?php echo $fetch['email']; ?>">
-          <input type="hidden" name="specialization" value="<?php echo $fetch['category_name']; ?>">
-          <input type="hidden" name="experience_years" value="<?php echo $fetch['experience_years']; ?>">
-          <input type="hidden" name="status" value="<?php echo $fetch['status']; ?>">
-          <button class="btn btn-success" type="submit" name="action" value="approve">Approve</button>
-          <button class="btn btn-danger" type="submit" name="action" value="reject">Reject</button>
-        </form>
-      </td>
+      <td> <a href="pendingRequests.php?i=<?php echo $fetch['id']?>" class="btn btn-success">Approve.</a></td>
+      <td> <a href="pendingRequests.php?j=<?php echo $fetch['id']?>"  onclick="return confirm('Are you sure!.')" class="btn btn-danger">Reject.</a></td>
+      
     </tr>
   <?php } ?>
 </table>
+
+              <!-- PHP WORK -->
+
+
 <?php
+if(isset($_GET['i'])){
+  $id = $_GET['i'];
+  $query = "SELECT * FROM pending_requests WHERE id = '$id'";
+  $result = mysqli_query($connect, $query);
+  $fetch = mysqli_fetch_assoc($result);
+
+
+
+  $id = $fetch['id'];
+  $lawyername = $fetch['name'];
+  $lawyeremail = $fetch['email'];
+  $lawyerspecialization = $fetch['specialization'];
+  $lawyerexperience = $fetch['experience_years'];
+  $lawyercontact = $fetch['contact_number'];
+  $lawyerdescription = $fetch['description'];
+  $lawyerpass = $fetch['password'];
+  $lawyerimg = $fetch['profile_image'];
+  $roleid = 3;
+
+ $insert = "INSERT INTO `lawyers`(`lawyer_name`, `specialization`, `experience_years`, `profile_image`, `description`, `contact_number`, `email`, `password`, `role_id`)
+   VALUES ('$lawyername','$lawyerspecialization','$lawyerexperience','$lawyerimg','$lawyerdescription','$lawyercontact','$lawyeremail','$lawyerpass','$roleid')";
+
+$b = mysqli_query($connect , $insert);
+
+if($b){
+  $update = "UPDATE `pending_requests` SET `status` = 'Approved'
+              where id = $id";
+      
+    mysqli_query($connect , $update);
+    echo "<script>
+    window.location.href = 'pendingRequests.php';
+    </script>";
+
+}
+else{
+  echo "
+  <script>
+  alert('Error!.');
+  </script>
+  ";
+};
+
+};
+
+if(isset($_GET['j'])){
+  $id = $_GET['j'];
+  $query = "SELECT * FROM pending_requests WHERE id ='$id'";
+  $result = mysqli_query($connect, $query);
+  $fetch = mysqli_fetch_assoc($result);
+
+
+  $id = $fetch['id'];
+ 
+
+  $updated = "UPDATE `pending_requests` SET `status` = 'Rejected'
+              where id = $id";
+         
+     mysqli_query($connect , $updated);    
+     echo "<script>
+    window.location.href = 'pendingRequests.php';
+    </script>";
+};
+
+$del = "DELETE FROM `pending_requests` WHERE `status` != 'Pending'";
+$d = mysqli_query($connect , $del);
+
 
 ?>
 <?php

@@ -1,6 +1,6 @@
 <?php
 
-$connect = mysqli_connect("localhost" , "root" , "muhammad_ali" , "lawpoint", 3307 );
+$connect = mysqli_connect("localhost" , "root" , "" , "lawpoint");
 
 // if($connect){
 //     echo "Connected";
