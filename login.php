@@ -1,4 +1,5 @@
 <?php
+session_start();
 ob_start();
 include("Admin/connection.php");
 
@@ -18,16 +19,30 @@ $check2 = "SELECT * FROM lawyers WHERE `lawyer_name` = '$name' AND `email` = '$e
 $result_lawyer = mysqli_query($connect , $check2);
 
 if (mysqli_num_rows($result_customer) === 1) {
-    $fetch = mysqli_fetch_assoc($result_customer);
+    $fetch_customer = mysqli_fetch_assoc($result_customer);
 
-    if ($fetch['role_id'] == 2) {
-        header("Location: concept-master/index.html");
+    $_SESSION['customer_id'] = $fetch_customer['customer_id'];
+    $_SESSION['customer_name'] = $fetch_customer['customer_name'];
+    $_SESSION['customer_email'] = $fetch_customer['email'];
+    $_SESSION['customer_role_id'] = $fetch_customer['role_id'];
+
+    if ($fetch_customer['role_id'] == 2) {
+        header("Location: CustomerPanel/index.php");
         exit();
     }
-} elseif (mysqli_num_rows($result_lawyer) === 1) {
-    $fetch = mysqli_fetch_assoc($result_lawyer);
 
-    if ($fetch['role_id'] == 3) {
+} else if (mysqli_num_rows($result_lawyer) === 1) {
+    $fetch_lawyer = mysqli_fetch_assoc($result_lawyer);
+
+    $_SESSION['lawyer_id'] = $fetch_customer['lawyer_id'];
+    $_SESSION['lawyer_name'] = $fetch_customer['lawyer_name'];
+    $_SESSION['lawyer_email'] = $fetch_customer['email'];
+    $_SESSION['lawyer_specialization'] = $fetch_customer['specialization'];
+    $_SESSION['lawyer_image'] = $fetch_customer['profile_image'];
+    $_SESSION['lawyer_contact_number'] = $fetch_customer['contact_number'];
+    $_SESSION['lawyer_role_id'] = $fetch_customer['role_id'];
+
+    if ($fetch_lawyer['role_id'] == 3) {
         header("Location: Admin/index.php");
         exit();
     }
