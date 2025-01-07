@@ -9,44 +9,72 @@ if(isset($_POST['login_btn'])){
     $email = $_POST['email'];
     $pass =  $_POST['password'];
 
-   $check =  "SELECT * FROM `customers` WHERE `customer_name` = '$name' AND `email` = '$email' AND `password` = '$pass'";
-   $result_customer = mysqli_query($connect, $check);
-   if (!$result_customer) {
-    die("Customer Query Failed: " . mysqli_error($connect));
-}
 
-$check2 = "SELECT * FROM lawyers WHERE `lawyer_name` = '$name' AND `email` = '$email' AND `password` = '$pass'";
+$check =  "SELECT * FROM `customers` WHERE `customer_name` = '$name' AND `email` = '$email' AND `role_id` = '2'";
+$result_customer = mysqli_query($connect, $check);
+
+
+$check2 = "SELECT * FROM `lawyers` WHERE `lawyer_name` = '$name' AND `email` = '$email' AND `role_id` = '3'";
 $result_lawyer = mysqli_query($connect , $check2);
+
+$check3 = "SELECT * FROM `admin_users` WHERE `name` = '$name' AND `email` = '$email' AND `role_id` = '1'";
+$result_admin = mysqli_query($connect , $check3);
 
 if (mysqli_num_rows($result_customer) === 1) {
     $fetch_customer = mysqli_fetch_assoc($result_customer);
 
+    
+
     $_SESSION['customer_id'] = $fetch_customer['customer_id'];
     $_SESSION['customer_name'] = $fetch_customer['customer_name'];
+    $_SESSION['customer_pic'] = $fetch_customer['customer_pic'];
     $_SESSION['customer_email'] = $fetch_customer['email'];
     $_SESSION['customer_role_id'] = $fetch_customer['role_id'];
 
-    if ($fetch_customer['role_id'] == 2) {
+    if (password_verify($pass , $fetch_customer['password'])) {
         header("Location: CustomerPanel/index.php");
         exit();
     }
 
-} else if (mysqli_num_rows($result_lawyer) === 1) {
+} 
+
+else if (mysqli_num_rows($result_lawyer) === 1) {
     $fetch_lawyer = mysqli_fetch_assoc($result_lawyer);
 
-    $_SESSION['lawyer_id'] = $fetch_customer['lawyer_id'];
-    $_SESSION['lawyer_name'] = $fetch_customer['lawyer_name'];
-    $_SESSION['lawyer_email'] = $fetch_customer['email'];
-    $_SESSION['lawyer_specialization'] = $fetch_customer['specialization'];
-    $_SESSION['lawyer_image'] = $fetch_customer['profile_image'];
-    $_SESSION['lawyer_contact_number'] = $fetch_customer['contact_number'];
-    $_SESSION['lawyer_role_id'] = $fetch_customer['role_id'];
+    $_SESSION['lawyer_id'] = $fetch_lawyer['lawyer_id'];
+    $_SESSION['lawyer_name'] = $fetch_lawyer['lawyer_name'];
+    $_SESSION['lawyer_email'] = $fetch_lawyer['email'];
+    $_SESSION['lawyer_specialization'] = $fetch_lawyer['specialization'];
+    $_SESSION['lawyer_image'] = $fetch_lawyer['profile_image'];
+    $_SESSION['lawyer_contact_number'] = $fetch_lawyer['contact_number'];
+    $_SESSION['lawyer_role_id'] = $fetch_lawyer['role_id'];
 
-    if ($fetch_lawyer['role_id'] == 3) {
+    if (password_verify($pass , $fetch_lawyer['password'])) {
+        header("Location: LawyerPanel/index.php");
+        exit();
+    }
+}  
+
+else if (mysqli_num_rows($result_admin) === 1) {
+    $fetch_admin = mysqli_fetch_assoc($result_admin);
+
+    $_SESSION['id'] = $fetch_admin['id'];
+    $_SESSION['name'] = $fetch_admin['name'];
+    $_SESSION['email'] = $fetch_admin['email'];
+    $_SESSION['image'] = $fetch_admin['image'];
+    $_SESSION['role_id'] = $fetch_admin['role_id'];
+
+    if ($pass === $fetch_admin['password']) {
         header("Location: Admin/index.php");
         exit();
     }
-} else {
+    else if (password_verify($pass , $fetch_admin['password'])){
+        header("Location: Admin/index.php");
+        exit();
+    }
+} 
+
+else {
     echo "<script>alert('Invalid username, email, or password. Please try again.');</script>";
 }
 
@@ -81,7 +109,7 @@ ob_end_flush();
 <div class="dashboard-wrapper">
 
             <div class="container-fluid dashboard-content">
-            <h1 style="color: lightblue; font-size: 50px; font-family: cooper; padding-left: 200px;">LAWPOINT.</h1>
+            <h1 style="color: lightblue; font-size: 50px; font-family: cooper; padding-left: 250px;">LAWPOINT.</h1>
                 <div class="row">
                        <div class="col-xl-10 col-lg-8 col-md-10 col-sm-12 col-12">
                             <div class="card">

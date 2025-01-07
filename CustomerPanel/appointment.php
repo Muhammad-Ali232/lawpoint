@@ -1,8 +1,21 @@
 <?php
 session_start();
 
+if (!isset($_SESSION['customer_id'])) {
+    // Redirect to login page if not logged in
+    header('Location: ../login.php');
+    exit();
+};
 include("header.php");
 include("../Admin/connection.php");
+
+if(isset($_GET['i'])){
+    $id = $_GET['i'];
+
+$sel = "SELECT * FROM lawyers WHERE lawyer_id = '$id'";
+$row = mysqli_query($connect , $sel);
+$result = mysqli_fetch_assoc($row);    
+}
 
 
 $lawyer = "SELECT * FROM lawyers";
@@ -12,6 +25,8 @@ $lawyer_row = mysqli_query($connect , $lawyer);
 
 <?php
 // appointment.php
+
+
 if(isset($_POST['add_btn'])){
 
     $customer_id = $_SESSION['customer_id'];
@@ -58,6 +73,9 @@ if(isset($_POST['add_btn'])){
                             <label class="form-label">Lawyer Name</label> <br>
                             <select style="width: 100%;" name="law_name" id="" class="form-control">
                                 <option selected disabled >Select Lawyer Name</option>
+                            <?php if(isset($result)){ ?>
+                                 <option selected value="<?php echo $result['lawyer_id']?> "> <?php echo $result['lawyer_name']?> </option>
+                            <?php }?>
                             <?php
                                  while($option = mysqli_fetch_assoc($lawyer_row)){ ?>
                                 <option value=" <?php echo $option['lawyer_id']?> "> <?php echo $option['lawyer_name']?> </option>

@@ -1,8 +1,62 @@
 <?php
+session_start();
 include("../Admin/connection.php");
 include("header.php");
 
+$select = "SELECT * FROM `categories` ";
+$query = mysqli_query($connect , $select);
+
 ?>
+
+<style>
+
+ 
+        .row .ab {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px; 
+            justify-content: center;
+            margin: 0;
+            padding: 20px;
+        }
+        
+        .circle-card {
+            width: 200px;        
+            height: 200px;       
+            background-color: #aa9166;
+            border-radius: 50%;      
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); 
+            text-align: center;
+            color: white;
+            margin-left: 45px;
+            /* grid-gap: 2;           */
+            font-size: 18px;
+            transition: transform 0.3s ease; 
+        }
+
+        /* Hover effect */
+        .circle-card:hover {
+            transform: scale(1.05);   /* Slight zoom effect on hover */
+        }
+
+        .circle-card .icon {
+            font-size: 50px; /* Icon size */
+            margin-bottom: 10px; /* Space between icon and text */
+        }
+
+        .circle-card .title {
+            font-family: 'EB Garamond', serif;
+            font-weight: bold;
+            font-size: 40px;
+            color: black;
+        }
+
+        
+
+    </style>
 
 <!-- Carousel Start -->
             <div id="carousel" class="carousel slide" data-ride="carousel">
@@ -48,79 +102,38 @@ include("header.php");
                 </a>
             </div>
             <!-- Carousel End -->
-            
-            
-            <!-- Top Feature Start-->
-            <div class="feature-top">
-                <div class="container-fluid">
-                    <div class="row align-items-center">
-                        <div class="col-md-3 col-sm-6">
-                            <div class="feature-item">
-                                <i class="far fa-check-circle"></i>
-                                <h3>Legal</h3>
-                                <p>Govt Approved</p>
-                            </div>
-                        </div>
-                        <div class="col-md-3 col-sm-6">
-                            <div class="feature-item">
-                                <i class="fa fa-user-tie"></i>
-                                <h3>Attorneys</h3>
-                                <p>Expert Attorneys</p>
-                            </div>
-                        </div>
-                        <div class="col-md-3 col-sm-6">
-                            <div class="feature-item">
-                                <i class="far fa-thumbs-up"></i>
-                                <h3>Success</h3>
-                                <p>99.99% Case Won</p>
-                            </div>
-                        </div>
-                        <div class="col-md-3 col-sm-6">
-                            <div class="feature-item">
-                                <i class="far fa-handshake"></i>
-                                <h3>Support</h3>
-                                <p>Quick Support</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <!-- Top Feature End-->
 
-            
-            <!-- About Start -->
-            <div class="about">
+<!-- 
+
+
+
+            SERVICE CATEGORIES -->
+
+            <br>
+            <div class="service">
                 <div class="container">
-                    <div class="row align-items-center">
-                        <div class="col-lg-5 col-md-6">
-                            <div class="about-img">
-                                <img src="img/about.jpg" alt="Image">
-                            </div>
-                        </div>
-                        <div class="col-lg-7 col-md-6">
-                            <div class="section-header">
-                                <h2>Learn About Us</h2>
-                            </div>
-                            <div class="about-text">
-                                
-                                <p>
-                                    At Lawpoint your case is our priority. We work diligently to provide personalized, comprehensive legal services that meet your unique needs. You deserve a lawyer who listens, understands, and fights for you. 
-                                </p>
-                                
-                                <p>
-                                    With years of experience across various practice areas, we deliver strategic, results-driven solutions designed to achieve your goals. Let us handle your legal matters so you can focus on what matters most.</p>
-                                <a class="btn" href="about.php">Learn More</a>
-                            </div>
-                        </div>
+                    <div class="section-header">
+                        <h2>Our Practices Areas</h2>
                     </div>
-                </div>
+               </div>
             </div>
-            <!-- About End -->
+            <div class="row">
+            <?php while($fetch = mysqli_fetch_assoc($query)){ ?>
+                <div class="col-xl-3 col-lg-3 col-md-6 col-sm-12">
+                    <a href="services.php?cat_id=<?php echo $fetch['category_id']; ?>" style="text-decoration: none;">
+                    <div class="circle-card">
+                        <div class="title"><?php echo $fetch['category_name']; ?></div>
+                    </div>
+                    </a>
+                </div>
+            <?php } ?>
+            </div>
+            <br> <br>
 
 
             
             <!-- Service Start -->
-            <div class="service">
+            <!-- <div class="service">
                 <div class="container">
                     <div class="section-header">
                         <h2>Our Practices Areas</h2>
@@ -174,8 +187,39 @@ include("header.php");
                         
                     </div>
                 </div>
-            </div>
+            </div> -->
             <!-- Service End -->
+
+                        
+            <!-- About Start -->
+            <div class="about">
+                <div class="container">
+                    <div class="row align-items-center">
+                        <div class="col-lg-5 col-md-6">
+                            <div class="about-img">
+                                <img src="img/about.jpg" alt="Image">
+                            </div>
+                        </div>
+                        <div class="col-lg-7 col-md-6">
+                            <div class="section-header">
+                                <h2>Learn About Us</h2>
+                            </div>
+                            <div class="about-text">
+                                
+                                <p>
+                                    At Lawpoint your case is our priority. We work diligently to provide personalized, comprehensive legal services that meet your unique needs. You deserve a lawyer who listens, understands, and fights for you. 
+                                </p>
+                                
+                                <p>
+                                    With years of experience across various practice areas, we deliver strategic, results-driven solutions designed to achieve your goals. Let us handle your legal matters so you can focus on what matters most.</p>
+                                <a class="btn" href="about.php">Learn More</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- About End -->
+
             
             
             <!-- Feature Start -->
@@ -233,205 +277,10 @@ include("header.php");
             </div>
             <!-- Feature End -->
 
-             
-            <!-- Team Start -->
-            <div class="team">
-                <div class="container">
-                    <div class="section-header">
-                        <h2>Meet Our Expert Attorneys</h2>
-                    </div>
-                    <div class="row">
-                        <div class="col-lg-3 col-md-6">
-                            <div class="team-item">
-                                <div class="team-img">
-                                    <img src="img/team-1.jpg" alt="Team Image">
-                                </div>
-                                <div class="team-text">
-                                    <h2>Business Consultant</h2>
-                                
-                                    <div class="team-social">
-                                    <h2>Adam Phillips</h2>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-lg-3 col-md-6">
-                            <div class="team-item">
-                                <div class="team-img">
-                                    <img src="img/team-2.jpg" alt="Team Image">
-                                </div>
-                                <div class="team-text">
-                                    <h2>Criminal Consultant</h2>
-                                    
-                                    <div class="team-social">
-                                    <h2>Dylan Adams</h2>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-lg-3 col-md-6">
-                            <div class="team-item">
-                                <div class="team-img">
-                                    <img src="img/team-3.jpg" alt="Team Image">
-                                </div>
-                                <div class="team-text">
-                                    
-                                    <h2>Divorce Consultant</h2>
-                                    <div class="team-social">
-                                    <h2>Gloria Edwards</h2>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-lg-3 col-md-6">
-                            <div class="team-item">
-                                <div class="team-img">
-                                    <img src="img/team-4.jpg" alt="Team Image">
-                                </div>
-                                <div class="team-text">
-                                    <h2>Immigration Consultant</h2>
-                                    <div class="team-social">
-                                    <h2>Josh Dunn</h2>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <!-- Team End -->
+
 
             
-            <!-- Testimonial Start -->
-            <div class="testimonial">
-                <div class="container">
-                    <div class="section-header">
-                        <h2>Review From Client</h2>
-                    </div>
-                    <div class="owl-carousel testimonials-carousel">
-                        <div class="testimonial-item">
-                            <i class="fa fa-quote-right"></i>
-                            <div class="row align-items-center">
-                                <div class="col-3">
-                                    <img src="img/testimonial-1.jpg" alt="">
-                                </div>
-                                <div class="col-9">
-                                    <h2>Client Name</h2>
-                                    <p>Profession</p>
-                                </div>
-                                <div class="col-12">
-                                    <p>
-                                        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam accumsan lacus eget velit
-                                    </p>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="testimonial-item">
-                            <i class="fa fa-quote-right"></i>
-                            <div class="row align-items-center">
-                                <div class="col-3">
-                                    <img src="img/testimonial-2.jpg" alt="">
-                                </div>
-                                <div class="col-9">
-                                    <h2>Client Name</h2>
-                                    <p>Profession</p>
-                                </div>
-                                <div class="col-12">
-                                    <p>
-                                        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam accumsan lacus eget velit
-                                    </p>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="testimonial-item">
-                            <i class="fa fa-quote-right"></i>
-                            <div class="row align-items-center">
-                                <div class="col-3">
-                                    <img src="img/testimonial-3.jpg" alt="">
-                                </div>
-                                <div class="col-9">
-                                    <h2>Client Name</h2>
-                                    <p>Profession</p>
-                                </div>
-                                <div class="col-12">
-                                    <p>
-                                        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam accumsan lacus eget velit
-                                    </p>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="testimonial-item">
-                            <i class="fa fa-quote-right"></i>
-                            <div class="row align-items-center">
-                                <div class="col-3">
-                                    <img src="img/testimonial-4.jpg" alt="">
-                                </div>
-                                <div class="col-9">
-                                    <h2>Client Name</h2>
-                                    <p>Profession</p>
-                                </div>
-                                <div class="col-12">
-                                    <p>
-                                        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam accumsan lacus eget velit
-                                    </p>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="testimonial-item">
-                            <i class="fa fa-quote-right"></i>
-                            <div class="row align-items-center">
-                                <div class="col-3">
-                                    <img src="img/testimonial-1.jpg" alt="">
-                                </div>
-                                <div class="col-9">
-                                    <h2>Client Name</h2>
-                                    <p>Profession</p>
-                                </div>
-                                <div class="col-12">
-                                    <p>
-                                        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam accumsan lacus eget velit
-                                    </p>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="testimonial-item">
-                            <i class="fa fa-quote-right"></i>
-                            <div class="row align-items-center">
-                                <div class="col-3">
-                                    <img src="img/testimonial-2.jpg" alt="">
-                                </div>
-                                <div class="col-9">
-                                    <h2>Client Name</h2>
-                                    <p>Profession</p>
-                                </div>
-                                <div class="col-12">
-                                    <p>
-                                        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam accumsan lacus eget velit
-                                    </p>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="testimonial-item">
-                            <i class="fa fa-quote-right"></i>
-                            <div class="row align-items-center">
-                                <div class="col-3">
-                                    <img src="img/testimonial-3.jpg" alt="">
-                                </div>
-                                <div class="col-9">
-                                    <h2>Client Name</h2>
-                                    <p>Profession</p>
-                                </div>
-                                <div class="col-12">
-                                    <p>
-                                        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam accumsan lacus eget velit
-                                    </p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <!-- Testimonial End -->
+           
 
            
 

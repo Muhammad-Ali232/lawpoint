@@ -10,47 +10,6 @@ $social_links = [
 ];
 ?>
 
-<!-- Newsletter Start -->
-<div class="newsletter">
-    <div class="container">
-        <div class="section-header">
-            <h2>Subscribe Our Newsletter</h2>
-        </div>
-        <div class="form">
-            <?php
-            $alert_message = "";
-            if ($_SERVER["REQUEST_METHOD"] == "POST") {              
-                $email = filter_var($_POST['email'], FILTER_SANITIZE_EMAIL);
-                if (filter_var($email, FILTER_VALIDATE_EMAIL)) {
-                    $insert_query = "INSERT INTO `newsletter_subscriber` (`email`) VALUES ('$email')";
-                    $done = mysqli_query($connect, $insert_query);
-                    if ($done) {
-                        $alert_message = "Thank you for subscribing!";
-                    } else {
-                        $alert_message = "There was an error processing your subscription. Please try again later.";
-                    }
-                } else {
-                    $alert_message = "Please enter a valid email address.";
-                }
-            }
-            ?>
-
-            <!-- Subscription Form -->
-            <form method="post" action="">
-                <input class="form-control" type="email" name="email" placeholder="Email here" required>
-                <button class="btn" type="submit">Submit</button>
-            </form>
-
-           
-            <?php if ($alert_message != ""): ?>
-                <script type="text/javascript">
-                    alert("<?php echo $alert_message; ?>");
-                </script>
-            <?php endif; ?>
-        </div>
-    </div>
-</div>
-<!-- Newsletter End -->
 
             <!-- Footer Start -->
             <div class="footer">

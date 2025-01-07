@@ -1,6 +1,6 @@
 <?php
 include("header.php");
-include("connection.php");
+include("../Admin/connection.php");
 ?>
 <?php
 if (isset($_POST['btn'])) {
@@ -16,7 +16,7 @@ if (isset($_POST['btn'])) {
         exit;
     }
 
-    $insert_query = "INSERT INTO `messages` (`name`, `email`, `subject`, `contact`, `message`) 
+    $insert_query = "INSERT INTO `contact_form` (`name`, `email`, `subject`, `contact`, `message`) 
                      VALUES ('$name', '$email', '$subject', '$contact', '$message')";
 
     $done = mysqli_query($connect, $insert_query);
@@ -95,7 +95,7 @@ if (isset($_POST['btn'])) {
             <input type="text" name="subject" class="form-control" placeholder="Subject" required="required" />
         </div>
         <div class="form-group">
-            <input type="text" name="number" class="form-control" placeholder="Number" required="required" />
+            <input type="text" name="contact" class="form-control" placeholder="Number" required="required" />
         </div>
         <div class="form-group">
             <textarea name="message" class="form-control" placeholder="Message" required="required"></textarea>

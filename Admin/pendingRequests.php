@@ -11,7 +11,7 @@ $row = mysqli_query($connect, $select);
 ?>
 
 
-<div class="col-xl-10 col-lg-10 col-md-12 col-sm-12 col-12">
+<div class="col-xl-10 col-lg-12 col-md-12 col-sm-12 col-12">
                             <div class="card">
                                 <h5 class="card-header">Pending Requests</h5>
                                 <div class="card-body">

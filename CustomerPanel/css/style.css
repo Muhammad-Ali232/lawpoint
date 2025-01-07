@@ -1,6 +1,16 @@
 /*******************************/
 /********* General CSS *********/
 /*******************************/
+
+html, body {
+    margin: 0;
+    padding: 0;
+    overflow-x: hidden; /* Prevent horizontal scrolling */
+}
+body, html {
+    margin: 0;
+    padding: 0;
+}
 body {
     color: #666666;
     background: #ffffff;
@@ -40,8 +50,8 @@ a:focus {
 .wrapper {
     position: relative;
     width: 100%;
-    max-width: 1366px;
-    margin: 0 auto;
+    /* max-width: none; */
+    margin: 0;
     background: #ffffff;
 }
 
@@ -76,6 +86,7 @@ a:focus {
 /**********************************/
 .top-bar {
     position: relative;
+    width: 100vw;
     height: 90px;
     background: #000000;
 }
@@ -128,13 +139,13 @@ a:focus {
     font-family: 'Roboto', sans-serif;
     font-weight: 500;
     font-style: normal;
-    font-size: 25px;
+    font-size: 18px;
     margin: 0;
 }
 
 .top-bar .text p {
     color: #ffffff;
-    font-size: 13px;
+    font-size: 11px;
     margin: 0;
 }
 
@@ -156,13 +167,19 @@ a:focus {
     border-right: 1px solid rgba(255, 255, 255, .15);
 }
 
+.top-bar .social-icons a {
+    font-size: 22px;
+    width: 20px;
+    height: 100%;
+}
+
 .top-bar .social a:first-child {
     border-left: 1px solid rgba(255, 255, 255, .15);
 }
 
-.top-bar .social a:hover {
+.top-bar .social-icons a:hover {
     color: #aa9166;
-    background: #ffffff;
+    /* background: #ffffff; */
 }
 
 @media (min-width: 992px) {
@@ -180,6 +197,45 @@ a:focus {
         display: none;
     }
 }
+
+@media screen and (min-width: 1000px) {
+    .wrapper {
+        margin: 0 auto;
+        width: 100%; /* Ensure wrapper takes full width */
+    }
+
+    .wrapper .top-bar {
+      position: relative;
+      padding: 10px 20px;
+      width: 100vw; 
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      box-sizing: border-box;
+    }
+  
+    .wrapper .logo h1 {
+      font-size: 50px; /* Increase logo size for 1024px screens */
+      text-align: center; /* Align the logo to the left */
+    }
+  
+    .wrapper .top-bar-right {
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 20px; /* Add spacing between elements in the top bar */
+    }
+  
+    .social-icons a {
+      font-size: 16px; /* Adjust icon size */
+      color: #333; /* Icon color */
+    }
+  
+    .user-profile img {
+      width: 40px; /* Adjust profile picture size */
+      height: 40px;
+    }
+  }
 
 
 /**********************************/
@@ -279,6 +335,26 @@ a:focus {
     .nav-bar .btn {
         display: none;
     }
+}
+
+.dropdown .dropdown-menu {
+    background-color: #201e1e; /* White background */
+    border: 1px solid #dee2e6; /* Light border */
+}
+
+/* Dropdown Item Text Color */
+.dropdown-menu .dropdown-item {
+    color: #aa9166; /* Dark text */
+}
+
+.dropdown-menu .dropdown-item:hover {
+    background-color: #f8f9fa; /* Light gray hover background */
+    color: #000; /* Black text on hover */
+}
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
 }
 
 

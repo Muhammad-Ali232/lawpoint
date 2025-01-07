@@ -38,15 +38,15 @@ $c_row = mysqli_query($connect, $c_sel);
     </div>
 
     <!-- Customer Form -->
-    <form id="customerForm" class="hidden" method="POST">
+    <form id="customerForm" class="hidden" method="POST"  enctype="multipart/form-data">
       <h3 style="color: lightblue; text-align: center;">Customer Signup</h3>
       <div class="mb-3 d-flex flex-column justify-content-center align-items-center">
         <label for="customerName" class="form-label" style="color: lightblue; font-size: 20px;">Full Name</label>
-        <input style="width: 50%; " type="text" class="form-control" id="customerName" name="customerName" placeholder="Enter your name">
+        <input style="width: 50%; " type="text" class="form-control" id="customerName" name="customerName" placeholder="Enter your name" REQUIRED>
       </div>
       <div class="mb-3 d-flex flex-column justify-content-center align-items-center">
       <label class="mb-2"  style="color: lightblue; font-size: 20px;">Gender</label>
-      <select style="width: 50%; " name="gender" id="" class="form-select">
+      <select style="width: 50%; " name="gender" id="" class="form-select" REQUIRED>
             <option disabled selected>Select</option>
             <option value="M">Male</option>
             <option value="F">Female</option>
@@ -54,15 +54,19 @@ $c_row = mysqli_query($connect, $c_sel);
       </div>
       <div class="mb-3 d-flex flex-column justify-content-center align-items-center">>
         <label for="dob" class="form-label" style="color: lightblue; font-size: 20px;">Date Of Birth</label>
-        <input style="width: 50%; " type="date" class="form-control" id="dob" name="dob" placeholder="Enter your email">
+        <input style="width: 50%; " type="date" class="form-control" id="dob" name="dob"  REQUIRED>
       </div>
       <div class="mb-3 d-flex flex-column justify-content-center align-items-center">>
         <label for="customerEmail" class="form-label" style="color: lightblue; font-size: 20px;">Email</label>
-        <input style="width: 50%; " type="email" class="form-control" id="customerEmail" name="customerEmail" placeholder="Enter your email">
+        <input style="width: 50%; " type="email" class="form-control" id="customerEmail" name="customerEmail" placeholder="Enter your email"REQUIRED>
+      </div>
+      <div class="mb-3 d-flex flex-column justify-content-center align-items-center">
+        <label for="customer_img" class="form-label" style="color: lightblue; font-size: 20px;">Profile Image &nbsp<span style="color: lightblue; font-size:15px;">(Optional)</span></label>
+        <input style="width: 50%; " type="file" class="form-control" name="customer_img" id="customer_img">
       </div>
       <div class="mb-3 d-flex flex-column justify-content-center align-items-center">>
         <label for="customerPassword" class="form-label" style="color: lightblue; font-size: 20px;">Password</label>
-        <input style="width: 50%; " type="password" class="form-control" id="customerPassword" name="customerPassword" placeholder="Enter your password">
+        <input style="width: 50%; " type="password" class="form-control" id="customerPassword" name="customerPassword" placeholder="Enter your password" REQUIRED>
       </div>
        <div class="d-flex flex-column align-items-center justify-content-center mb-3">
           <div class="form-check">
@@ -144,9 +148,21 @@ if(isset($_POST['signup_btn1'])){
     $gender = $_POST['gender'];
     $dob = $_POST['dob'];
     $customerEmail = $_POST['customerEmail'];
+    $customerPic = $_FILES['customer_img'];
     $customerPassword = $_POST['customerPassword'];
     $role_id = 2;
     $encPass = password_hash($customerPassword, PASSWORD_BCRYPT);
+
+    $img_name = $customerPic['name'];
+    $img_tmpname = $customerPic['tmp_name'];
+    $img_size = $customerPic['size'];
+    $img_type = $customerPic['type'];
+
+    $customerimage = "NO Image";
+
+    $path = 'Admin/customer_pics/' . $img_name;
+
+    $img = move_uploaded_file($img_tmpname, $path);
 
     $sel = "SELECT * FROM customers WHERE customer_name = '$customerName'";
     $q = mysqli_query($connect, $sel);
@@ -159,20 +175,34 @@ if(isset($_POST['signup_btn1'])){
     }
     
     else{
-
-    $insert = "INSERT INTO `customers`(`customer_name`, `gender`, `date_of_birth`, `email`, `password`, `role_id`) 
-    VALUES ('$customerName','$gender','$dob','$customerEmail','$encPass','$role_id')";
+          if($img){
+    $insert = "INSERT INTO `customers`(`customer_name`, `gender`, `date_of_birth`, `email`, `customer_pic` , `password`, `role_id`) 
+    VALUES ('$customerName','$gender','$dob','$customerEmail','$img_name','$encPass','$role_id')";
     $done = mysqli_query($connect, $insert);
 
 
     if($done){
       echo "<script>
         alert('Account Created.');
-        window.location.href = 'login.php';
+        window.location.href = 'CustomerPanel/index.php';
         </script>";
     }
   }
-};
+  else{
+    $insert = "INSERT INTO `customers`(`customer_name`, `gender`, `date_of_birth`, `email`, `customer_pic` , `password`, `role_id`) 
+    VALUES ('$customerName','$gender','$dob','$customerEmail','$customerimage','$encPass','$role_id')";
+    $done = mysqli_query($connect, $insert);
+
+
+    if($done){
+      echo "<script>
+        alert('Account Created.');
+        window.location.href = 'CustomerPanel/index.php';
+        </script>";
+    }
+  }
+  }
+  };
 
 if(isset($_POST['signup_btn2'])){
 
@@ -222,6 +252,7 @@ if(isset($_POST['signup_btn2'])){
     echo "
     <script>
     alert('Your Request has been send to the Admin for approval.');
+    window.location.href = 'CustomerPanel/index.php';
     </script>";
    }
   }
